@@ -13,7 +13,7 @@ jobs:
             os: macos-latest
           - name: Linux
             os: ubuntu-latest
-        python-version: ["3.11", "3.12", "3.13"]
+        python-version: ["3.12", "3.13", "3.14"]
 
     name: Build ${{ matrix.config.name }} for ${{ matrix.python-version }}
     runs-on: ${{ matrix.config.os }}
