@@ -2,6 +2,8 @@
 # distutils: language = c++
 # cython: c_string_type=unicode, c_string_encoding=utf8
 
+from .platforms import list_platforms, Platform
+
 from libcpp.string cimport string
 from libcpp.vector cimport vector
 from libcpp.utility cimport pair
@@ -223,14 +225,14 @@ cdef class Attributes:
 
     property links:
         def __get__(self):
-            return <int>self.attributes.links
+            return list_platforms(<int>self.attributes.links)
 
         def __set__(self, obj):
             raise ImmutableError("links")
 
     property missing:
         def __get__(self):
-            return broma.fix_platformname(self.attributes.missing)
+            return list_platforms(<int>self.attributes.missing)
         
         def __set__(self, obj):
             raise ImmutableError("missing")
