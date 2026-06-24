@@ -15,8 +15,8 @@ class Platform(IntFlag):
     MacIntel = 32
     MacArm = 64
     Mac = MacIntel | MacArm
-        
-def list_platforms(links:Platform) -> list[str]:
+
+def list_platforms(links: Platform | int) -> list[str]:
     if isinstance(links, int):
         links = Platform(links)
 

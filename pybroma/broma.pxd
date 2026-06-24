@@ -13,11 +13,13 @@ cdef extern from "ast.hpp" namespace "broma" nogil:
     enum class Platform:
         pass
 
+
     struct Attributes:
         string docs # Any docstring pulled from a `[[docs(...)]]` attribute.
         Platform links # All the platforms that link the class or function
         Platform missing # All the platforms that are missing the class or function
         vector[string] depends # List of classes that this class or function depends on
+
 
     # offsets for each platform
     struct PlatformNumber:
@@ -27,22 +29,25 @@ cdef extern from "ast.hpp" namespace "broma" nogil:
         ptrdiff_t win
         ptrdiff_t android32
         ptrdiff_t android64
-    
+
+
     struct Type:
         string name
         bint is_struct
-     
+
+
     struct FunctionProto:
-        
         Type ret # The return type of the function.
         vector[pair[Type, string]] args # All arguments, represented by their type and their name.
         string name # The function's name.
+
 
     enum class FunctionType:
         Normal = 0
         Ctor = 1 # A constructor.
         Dtor = 2 # A destructor.
-     
+
+
     struct MemberFunctionProto:
         Attributes attributes 
         Type ret # The return type of the function.
@@ -54,30 +59,31 @@ cdef extern from "ast.hpp" namespace "broma" nogil:
         bint is_callback
         bint is_static
 
+
     # @brief A class's member variables.
     struct MemberField:
         Platform platform # For platform-specific members, all platforms this member is defined on 
         string name # The name of the field.
         Type type # The type of the field.
         size_t count # The number of elements in the field when it's an array (pretty much unused since we use array).
-     
 
-     # @brief Any class padding.
+
+    # @brief Any class padding.
     struct PadField:
         PlatformNumber amount # The amount of padding, separated per platform.
-     
 
-     # @brief A function that is bound to an offset.
+
+    # @brief A function that is bound to an offset.
     struct FunctionBindField:
         MemberFunctionProto prototype
         PlatformNumber binds # The offsets, separated per platform.
 
 
-    
-     # @brief A function body that should go in a header file (.hpp).
+    # @brief A function body that should go in a header file (.hpp).
     struct InlineField:
         string inner # The body of the function as a raw string.
-    
+
+
     struct Field:
         size_t field_id # The index of the field. This starts from 0 and counts up across all classes.
         string parent # The name of the parent class.
@@ -85,9 +91,11 @@ cdef extern from "ast.hpp" namespace "broma" nogil:
         # Platform links # All the platforms that link the field
         # Platform missing # All the platforms that are missing the field
 
+
     struct Function:
         FunctionProto prototype # The free function's signature.
         PlatformNumber binds # The offsets of free function, separated per platform.
+
 
     struct Class:
         Attributes attributes
@@ -95,11 +103,10 @@ cdef extern from "ast.hpp" namespace "broma" nogil:
         vector[string] superclasses # Parent classes that the current class inherits.
         vector[Field] fields # All the fields parsed in the class.
 
-    
+
     struct Root:
         vector[Class] classes
         vector[Function] functions
-
 
 
 cdef extern from "helper.hpp" nogil:

@@ -2,6 +2,8 @@
 # distutils: language = c++
 # cython: c_string_type=unicode, c_string_encoding=utf8
 
+from .platforms import list_platforms, Platform
+
 from libcpp.string cimport string
 from libcpp.vector cimport vector
 from libcpp.utility cimport pair
@@ -177,13 +179,19 @@ cdef class MemberField:
     def __cinit__(self):
         pass
 
+    property platform:
+        def __get__(self):
+            return list_platforms(<int>self.field.platform)
+        
+        def __set__(self, obj):
+            raise ImmutableError("platform")
+
     property name:
         def __get__(self):
             return <str>self.field.name
 
         def __set__(self, obj):
             raise ImmutableError("name")
-
 
     property type:
         def __get__(self):
@@ -198,7 +206,6 @@ cdef class MemberField:
 
         def __set__(self, obj):
             raise ImmutableError("count")
-
 
     @staticmethod
     cdef MemberField init(broma.MemberField field) noexcept:
@@ -223,14 +230,14 @@ cdef class Attributes:
 
     property links:
         def __get__(self):
-            return <int>self.attributes.links
+            return list_platforms(<int>self.attributes.links)
 
         def __set__(self, obj):
             raise ImmutableError("links")
 
     property missing:
         def __get__(self):
-            return broma.fix_platformname(self.attributes.missing)
+            return list_platforms(<int>self.attributes.missing)
         
         def __set__(self, obj):
             raise ImmutableError("missing")
@@ -648,14 +655,5 @@ cdef class Root:
         
         def __set__(self, obj):
             raise ImmutableError("classes")
-
-    # NOTE: Deprecation will be soon for classesAsDict & functionsAsDict Use __getitem__ instead...
-    def functionsAsDict(self) -> dict:
-        """Converts Functions to A Dictionary"""
-        return {<str>c.prototype.name: Function.init(c) for c in self.root.functions}
-
-    def classesAsDict(self) -> dict:
-        """Converts Classes to a dictionary"""
-        return {<str>c.name: Class.init(c) for c in self.root.classes}
 
 
