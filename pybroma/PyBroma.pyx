@@ -179,13 +179,19 @@ cdef class MemberField:
     def __cinit__(self):
         pass
 
+    property platform:
+        def __get__(self):
+            return list_platforms(<int>self.field.platform)
+        
+        def __set__(self, obj):
+            raise ImmutableError("platform")
+
     property name:
         def __get__(self):
             return <str>self.field.name
 
         def __set__(self, obj):
             raise ImmutableError("name")
-
 
     property type:
         def __get__(self):
@@ -200,7 +206,6 @@ cdef class MemberField:
 
         def __set__(self, obj):
             raise ImmutableError("count")
-
 
     @staticmethod
     cdef MemberField init(broma.MemberField field) noexcept:

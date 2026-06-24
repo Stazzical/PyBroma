@@ -35,6 +35,10 @@ class MemberFunctionProto:
 
 class MemberField:
     @property
+    def platform(self) -> list[str]:
+        """Get a `list` of platforms this member is present on."""
+        ...
+    @property
     def name(self) -> str: ...
     @property
     def type(self) -> Type: ...
