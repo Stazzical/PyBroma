@@ -4,7 +4,7 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "pybroma"
-version = "0.1.5"
+version = "0.2.0"
 authors = [{ name = "Calloc" }]
 
 [tool.scikit-build]
