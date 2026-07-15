@@ -187,7 +187,7 @@ cdef class FunctionProto:
 
     # Alias for attributes
     @property
-    def attrs(self): return self.attributes
+    def attrs(self): return self.attributes()
 
     @property
     def ret(self): return Type.init(self.fproto.ret)
@@ -222,7 +222,7 @@ cdef class MemberFunctionProto:
     def attributes(self):
         return Attributes.init(self.mfproto.attributes)
     @property
-    def attrs(self): return self.attributes
+    def attrs(self): return self.attributes()
 
     @property
     def ret(self): return Type.init(self.mfproto.ret)
@@ -268,7 +268,7 @@ cdef class FunctionBindField:
     def prototype(self):
         return MemberFunctionProto.init(self.fbf.prototype)
     @property
-    def proto(self): return self.prototype
+    def proto(self): return self.prototype()
 
     @property
     def binds(self):
@@ -384,7 +384,7 @@ cdef class Function:
     def prototype(self):
         return FunctionProto.init(self.func.prototype)
     @property
-    def proto(self): return self.prototype
+    def proto(self): return self.prototype()
 
     @property
     def binds(self):
@@ -395,6 +395,27 @@ cdef class Function:
         cdef Function fn = Function()
         fn.func = func
         return fn
+
+
+cdef class Header:
+    cdef:
+        broma.Header _hdr
+
+    def __cinit__(self):
+        pass
+
+    @property
+    def name(self): return <str>self._hdr.name
+
+    @property
+    def platform(self):
+        return list_platforms(<int>self._hdr.platform)
+
+    @staticmethod
+    cdef Header init(broma.Header hdr) noexcept:
+        cdef Header _h = Header()
+        _h._hdr = hdr
+        return _h
 
 
 cdef class Class:
@@ -411,7 +432,7 @@ cdef class Class:
     def attributes(self):
         return Attributes.init(self._cls.attributes)
     @property
-    def attrs(self): return self.attributes
+    def attrs(self): return self.attributes()
 
     @property
     def name(self): return <str>self._cls.name
@@ -419,11 +440,15 @@ cdef class Class:
     @property
     def superclasses(self):
         cdef size_t i
+        cdef string sclass
+
         # Have we made these into a list?
         # The class itself might not have any superclasses
         # so checking if the list is empty wouldn't really work
         if not self._superclasses_ran:
-            self._superclasses = [<str>self._cls.superclasses[i] for i in range(self._cls.superclasses.size())]
+            for i in range(self._cls.superclasses.size()):
+                sclass = self._cls.superclasses[i]
+                self._superclasses.append(<str>sclass)
             self._superclasses_ran = True
         return self._superclasses
 
@@ -456,12 +481,21 @@ cdef class Root:
     cdef:
         broma.Root root
         list _functions
-        dict _classes
+        list _classes
+        list _headers
+        dict _optimized_class_dict
 
     def __init__(self, str fileName):
         self.root = broma.parse_file(fileName)
         self._functions = []
-        self._classes = {}
+        self._optimized_class_dict = {
+            cls.name: Class.init(cls) for cls in self.root.classes
+        }
+
+        self._classes = list(self._optimized_class_dict.values())
+
+    @property
+    def classes(self): return self._classes
 
     @property
     def functions(self):
@@ -470,9 +504,10 @@ cdef class Root:
         return self._functions
 
     @property
-    def classes(self):
-        if not self._classes:
-            self._classes = {
-                <str>cls.name: Class.init(cls) for cls in self.root.classes
-            }
-        return self._classes
+    def headers(self):
+        if not self._headers:
+            self._headers = [Header.init(x) for x in self.root.headers]
+        return self._headers
+
+    def __getitem__(self, str _class_name_):
+        return self._optimized_class_dict[_class_name_]

@@ -159,13 +159,19 @@ class PadField:
 
 class InlineField:
     @property
-    def inner(self) -> str: ...
+    def inner(self) -> str:
+        """The inline body of the function as a raw string."""
+        ...
 
 class Field:
     @property
-    def id(self) -> int: ...
+    def id(self) -> int:
+        """The index of the field. This starts from 0 and counts up across all classes."""
+        ...
     @property
-    def parent(self) -> str: ...
+    def parent(self) -> str:
+        """The name of the parent class."""
+        ...
 
     def getAsFunctionBindField(self) -> Optional[FunctionBindField]: ...
     def getAsMemberField(self) -> Optional[MemberField]: ...
@@ -182,6 +188,16 @@ class Function:
     @property
     def binds(self) -> PlatformNumber:
         """A `PlatformNumber` instance of binding addresses for all platforms."""
+        ...
+
+class Header:
+    @property
+    def name(self) -> str:
+        """Name of the header file as written in the import declaration."""
+        ...
+    @property
+    def platform(self) -> list[str]:
+        """Platforms this header is present on. All platforms listed if none specified."""
         ...
 
 class Class:
@@ -219,10 +235,20 @@ class Root:
     def __init__(self, fileName: str) -> None: ...
 
     @property
-    def classes(self) -> dict[str, Class]:
+    def classes(self) -> list[Class]:
         """Classes as class name to `Class` instance."""
         ...
     @property
     def functions(self) -> list[Function]:
         """Free functions."""
         ...
+    @property
+    def headers(self) -> list[Header]:
+        """
+        Header files that this Broma file imports.
+        These are automatically resolved and loaded by Broma if they exist.
+        """
+        ...
+
+    def __getitem__(self, _class_name_: str) -> Optional[Class]:
+        """Searches for a `Class` object by name, similar to a dict in the original Broma implementation."""

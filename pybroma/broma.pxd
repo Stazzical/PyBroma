@@ -86,6 +86,10 @@ cdef extern from "ast.hpp" namespace "broma" nogil:
         FunctionProto prototype # The free function's signature.
         PlatformNumber binds # The offsets of free function, separated per platform.
 
+    struct Header:
+        string name
+        Platform platform
+
     struct Class:
         Attributes attributes
         string name # The name of the class.
@@ -96,6 +100,7 @@ cdef extern from "ast.hpp" namespace "broma" nogil:
     struct Root:
         vector[Class] classes
         vector[Function] functions
+        vector[Header] headers
 
 
 cdef extern from "helper.hpp" nogil:
