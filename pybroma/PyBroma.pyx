@@ -187,7 +187,7 @@ cdef class FunctionProto:
 
     # Alias for attributes
     @property
-    def attrs(self): return self.attributes()
+    def attrs(self): return self.attributes
 
     @property
     def ret(self): return Type.init(self.fproto.ret)
@@ -222,7 +222,7 @@ cdef class MemberFunctionProto:
     def attributes(self):
         return Attributes.init(self.mfproto.attributes)
     @property
-    def attrs(self): return self.attributes()
+    def attrs(self): return self.attributes
 
     @property
     def ret(self): return Type.init(self.mfproto.ret)
@@ -268,7 +268,7 @@ cdef class FunctionBindField:
     def prototype(self):
         return MemberFunctionProto.init(self.fbf.prototype)
     @property
-    def proto(self): return self.prototype()
+    def proto(self): return self.prototype
 
     @property
     def binds(self):
@@ -384,7 +384,7 @@ cdef class Function:
     def prototype(self):
         return FunctionProto.init(self.func.prototype)
     @property
-    def proto(self): return self.prototype()
+    def proto(self): return self.prototype
 
     @property
     def binds(self):
@@ -432,7 +432,7 @@ cdef class Class:
     def attributes(self):
         return Attributes.init(self._cls.attributes)
     @property
-    def attrs(self): return self.attributes()
+    def attrs(self): return self.attributes
 
     @property
     def name(self): return <str>self._cls.name
@@ -489,7 +489,7 @@ cdef class Root:
         self.root = broma.parse_file(fileName)
         self._functions = []
         self._optimized_class_dict = {
-            cls.name: Class.init(cls) for cls in self.root.classes
+            <str>cls.name: Class.init(cls) for cls in self.root.classes
         }
 
         self._classes = list(self._optimized_class_dict.values())

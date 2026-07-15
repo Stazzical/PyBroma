@@ -1,4 +1,13 @@
-# pybroma/__init__.py
+try:
+    # Read the auto-generated file if installed from wheel
+    from ._version import __version__
+except ImportError:
+    try:
+        # Fallback for local dev environments
+        import importlib.metadata
+        __version__ = importlib.metadata.version("pybroma")
+    except Exception:
+        __version__ = "0.2.0"
 
 from .PyBroma import (
     AccessModifier,

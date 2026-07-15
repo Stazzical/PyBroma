@@ -8,6 +8,7 @@ __pycache__/
 *.egg-info/
 pybroma/PyBroma.cpp
 *.whl
+_version.py
 
 # External unittests I'll make a seperate repo for these in the future - Calloc
 tests
