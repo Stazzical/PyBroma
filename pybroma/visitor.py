@@ -9,27 +9,27 @@ class BromaTreeVisitor:
     def visit_PlatformNumber(self, node):
         return 
 
-    def visit_FunctionProto(self, node:FunctionProto):
+    def visit_FunctionProto(self, node: FunctionProto):
         return 
 
-    def visit_MemberFunctionProto(self, node:MemberFunctionProto):
+    def visit_MemberFunctionProto(self, node: MemberFunctionProto):
         return
     
-    def visit_Attributes(self, node:Attributes):
+    def visit_Attributes(self, node: Attributes):
         return
     
-    def visit_InlineField(self, node:InlineField):
+    def visit_InlineField(self, node: InlineField):
         return 
 
-    def visit_FunctionBindField(self, node:FunctionBindField):
+    def visit_FunctionBindField(self, node: FunctionBindField):
         self.visit_MemberFunctionProto(node.prototype)
         self.visit_PlatformNumber(node.binds)
 
-    def visit_MemberField(self, node:MemberField):
+    def visit_MemberField(self, node: MemberField):
         pass 
 
-    def visit_PadField(self, node:PadField):
-        self.visit_FunctionProto(node)
+    def visit_PadField(self, node: PadField):
+        pass
  
     def visit_Field(self, f:Field):
         if x := f.getAsFunctionBindField():
@@ -53,7 +53,7 @@ class BromaTreeVisitor:
     
     def start(self, root:Root):
         self.root = root
-        for c in root.classes:
+        for c in root.classes.values():
             self.visit_Class(c)
         for f in root.functions:
             self.visit_Function(f)
