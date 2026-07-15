@@ -423,7 +423,7 @@ cdef class Class:
         # The class itself might not have any superclasses
         # so checking if the list is empty wouldn't really work
         if not self._superclasses_ran:
-            self._superclasses = [self._cls.superclasses[i] for i in range(self._cls.superclasses.size())]
+            self._superclasses = [<str>self._cls.superclasses[i] for i in range(self._cls.superclasses.size())]
             self._superclasses_ran = True
         return self._superclasses
 

@@ -210,6 +210,9 @@ class Class:
         """The Broma file this class originates from."""
         ...
 
+    def __eq__(self, other: object) -> bool: ...
+    def __hash__(self) -> int: ...
+
 class Root:
     """Parsed Broma file instance."""
 
