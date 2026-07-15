@@ -1,35 +1,43 @@
 # PyBroma
 
-A Python embed of [broma from geode](https://github.com/geode-sdk/broma) used to parse C++ like files from the 
-[geometry dash bindings](https://github.com/geode-sdk/bindings).
+> [!CAUTION]
+> This library is currently highly experimental and features, APIs, or bindings may break without prior notice at any time. Use at your own risk in production-critical software!
 
+A Python wrapper for [Broma](https://github.com/geode-sdk/broma), designed to parse `.bro` files from the [Geometry Dash Geode bindings](https://github.com/geode-sdk/bindings).
+
+## Features
+
+- **Fast Prototyping:** Avoid slow C++ compile times with a scriptable Python environment.
+- **Mod Automation:** Generate code and automate reverse-engineering workflows for Geometry Dash and Geode mods.
+- **Tooling Support:** Ideal for creating tool-specific headers (e.g. Ghidra/IDA header files like in [BromaIDA](https://github.com/Stazzical/BromaIDA)).
 
 ## How To Use
+
 ```python
 from pybroma import Root
 
 
 # test.bro:
 # class BindedClass {
-# 	void bindedFunction() = mac 0xd5db0, win 0x3c8d, ios 0xa83bc;
+#     void bindedFunction() = mac 0xd5db0, win 0x3c8d, ios 0xa83bc;
 
-# 	int m_member1;
-# 	int m_member2;
+#     int m_member1;
+#     int m_member2;
 # }
 
 # class OtherBindedClass : BindedClass {
-# 	virtual void otherBindedFunction() = mac 0x7e3bc, win 0x5a1c, ios 0x8e412;
+#     virtual void otherBindedFunction() = mac 0x7e3bc, win 0x5a1c, ios 0x8e412;
 
-# 	// win and ios addresses have not been found yet, will not generate
-# 	static int staticFunction(int a, bool c) = mac 0x74bd3;
+#     // win and ios addresses have not been found yet, will not generate
+#     static int staticFunction(int a, bool c) = mac 0x74bd3;
 
-# 	// Embed c++ code
-# 	inline int getIndex(int index) {
-# 		return m_myVector[index];
-# 	} 
+#     // Embed c++ code
+#     inline int getIndex(int index) {
+#         return m_myVector[index];
+#     } 
 
-# 	// templates supported
-# 	std::vector<int> m_myVector;
+#     // templates supported
+#     std::vector<int> m_myVector;
 # }
 
 root = Root("test.bro")
@@ -45,35 +53,35 @@ for c in root.classes:
 # {'a': <pybroma.PyBroma.Type object at 0x0000018C6D507B70>, 'c': <pybroma.PyBroma.Type object at 0x0000018C6D507B30>}
 ```
 
-## why?
+## Installation
 
-- I wrote this library because it's slower to write C++ code and I felt like I needed something that could be easily aborted and easy to test when something doesn't run right.
-- To use a language that I was more familliar and comfortable with and has releativly good code safety features.
-- To generate code to automate the creation of mods and be able to reverse engineer geometry dash a little bit 
-more efficiently. Including creating ghidra headerfiles that ghidra can understand and parse.
-- For other programmers (especially beginner programmers) to try out this wonderful library that I have just recently made a bridge for in one full day. (I would expect that you have a bit of knowlege on how C++ works first.)
-- To go far beyond the scope of what broma is actually being used for such as reverse engineering. 
+### Option 1: Install via Prebuilt Wheels
 
-## Cool When Pypi Release?
-I may not get to that due to the required 2FA stuff because scammers were using pypi to host malicious malware. I hear you can use a usb stick (thumbdrive) so know that I am thinking about buying up a few more usb sticks for this.
+Download the compatible wheel for your OS, architecture, and Python version from the [GitHub Releases](https://github.com/prevter/PyBroma/releases) page.
 
-# How To Install
-Run this command to install the library:
-`pip install git+https://github.com/CallocGD/PyBroma`
+### Option 2: Install directly from Git
 
-Also Some parsing Error Features may not be avalible just yet so don't complain to me if it crashes broma does not have a clean way to handle errors yet to my knowlege.
+Run the following command in your terminal:
 
-## Cool Will Geode Add This Library To Their Repositories?
-I don't know, I sure hope so, I see the project's overall potential to be useful for that criteria but I doubt it. You'll just have to ask them and be paitient about it.
+```bash
+pip install git+https://github.com/prevter/PyBroma
+```
 
-## Anything else
-Might make a version of this in Rust as practice for binding C/C++ libraries since I am trying to learn how to do that kind of stuff.
+## Frequently Asked Questions
 
-## Bugs 
-- No Bugs Right now. All bugs have been apparently patched.
+### Will this be released on PyPI?
 
-## TODOS
+Due to licensing and redistribution limitations regarding the original codebase, an official PyPI release is unlikely. This repository serves as a maintained fork and functions as the primary backend for [BromaIDA](https://github.com/Stazzical/BromaIDA).
 
-- [X] Broma Writer/Formatter 
+### Will Geode officially adopt this library?
+
+There are no current plans for official adoption. If you find the tool useful for Geode development, feel free to recommend it to others in the community.
+
+## Bugs and Issues
+
+- No known issues at this time. If you get any errors while using PyBroma or scripts using it (e.g. BromaIDA), make sure you have installed the latest version available.
+
+## TODOs
+
+- [ ] Broma Writer/Formatter
 - [ ] Class member injector (For helping with pull requests to the bindings)
-- [ ] I'm rethinking about the possiblity of a pypi release if I can find a self-hosted 2FA software thingy
