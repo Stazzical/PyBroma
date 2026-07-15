@@ -186,6 +186,14 @@ class Function:
 
 class Class:
     @property
+    def attributes(self) -> Attributes:
+        """The class's Broma attributes."""
+        ...
+    @property
+    def attrs(self) -> Attributes:
+        """Shorthand equivalent for `attributes`."""
+        ...
+    @property
     def name(self) -> str:
         """The class name."""
         ...
@@ -196,14 +204,6 @@ class Class:
     @property
     def fields(self) -> list[Field]:
         """All class fields as `Field` instances."""
-        ...
-    @property
-    def attributes(self) -> Attributes:
-        """The class's Broma attributes."""
-        ...
-    @property
-    def attrs(self) -> Attributes:
-        """Shorthand equivalent for `attributes`."""
         ...
     @property
     def source(self) -> str:
